@@ -53,6 +53,7 @@ def keys():
 
         # Launch Apps
         map("M-<Return>", lazy.spawn(terminal)),
+        map("A-s", lazy.spawn("flameshot gui"), desc="Screenshot"),
 
         # Volume Control
         map("<XF86AudioRaiseVolume>", lazy.spawn(Command.volume_up)),

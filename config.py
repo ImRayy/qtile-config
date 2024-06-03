@@ -1,4 +1,5 @@
 import os
+import json
 import subprocess
 from libqtile import bar, layout, qtile, widget
 from libqtile import hook
@@ -6,6 +7,12 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import keybindings
+
+
+def load_file(path):
+    with open(path) as f:
+        return json.load(f)
+
 
 mod = "mod4"
 keys = keybindings.keys()
@@ -28,10 +35,35 @@ for i in groups:
         ),
     ])
 
+# Colorschemes
+try:
+    colors = load_file(
+        os.path.expanduser("~/.config/qtile/stylix-colors.json"))
+except FileNotFoundError:
+    colors = load_file(
+        os.path.expanduser("~/.config/qtile/default-colors.json"))
+
+BASE00 = colors['base00']
+BASE01 = colors['base01']
+BASE02 = colors['base02']
+BASE03 = colors['base03']
+BASE04 = colors['base04']
+BASE05 = colors['base05']
+BASE06 = colors['base06']
+BASE07 = colors['base07']
+BASE08 = colors['base08']
+BASE09 = colors['base09']
+BASE0A = colors['base0A']
+BASE0B = colors['base0B']
+BASE0C = colors['base0C']
+BASE0D = colors['base0D']
+BASE0E = colors['base0E']
+BASE0F = colors['base0F']
+
 layouts = [
-    layout.MonadTall(border_width=3, margin=4, border_focus="#b4befe"),
+    layout.MonadTall(border_width=3, margin=4, border_focus=BASE07),
     layout.Bsp(),
-    layout.Tile(),
+    layout.Tile(border_width=3, border_focus=BASE07),
     layout.TreeTab(),
 ]
 
@@ -54,61 +86,63 @@ screens = [
         top=bar.Bar(
             [
                 # OS icon
-                widget.TextBox(" ", fontsize=16, foreground="#74c7ec"),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
+                widget.TextBox(" ", fontsize=16, foreground=BASE0D),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
 
                 # Workspaces
                 widget.GroupBox(
                     fontsize=14,
                     highlight_method="block",
-                    active="#cdd6f4",
-                    block_highlight_text_color="#a6e3a1",
-                    highlight_color="#4B427E",
-                    this_current_screen_border="#1e1e2e",
-                    urgent_border="#f38ba8",
+                    active=BASE0D,
+                    block_highlight_text_color=BASE0B,
+                    highlight_color=BASE0E,
+                    this_current_screen_border=BASE00,
+                    urgent_border=BASE08,
                     rounded=False,
                     disable_drag=True,
                 ),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
 
                 # CPU
-                widget.TextBox(" ", fontsize=16, foreground="#cba6f7"),
+                widget.TextBox(" ", fontsize=16, foreground=BASE0E),
                 widget.CPU(
                     font=font_family,
                     fontsize=font_size,
                     fmt=fmt,
-                    foreground="#cba6f7",
+                    foreground=BASE0E,
                     format="CPU {load_percent}%",
                 ),
 
                 # Memory
-                widget.TextBox(" ", fontsize=16, foreground="#b4befe"),
+                widget.TextBox(" ", fontsize=16, foreground=BASE07),
                 widget.Memory(
                     font=font_family,
                     fontsize=font_size,
                     fmt=fmt,
-                    foreground="#b4befe",
+                    foreground=BASE07,
                     format="{MemUsed: .0f}{mm} /{MemTotal: .0f}{mm}",
                 ),
                 widget.Spacer(),
                 widget.Mpris2(
                     font=font_family,
                     fontsize=font_size,
+                    fmt=fmt,
                     format="{xesam:artist} - {xesam:title}",
                     no_metadata_text="Player paused",
-                    paused_text="󰏤 <b><i>paused:</i> {track}</b>",
-                    playing_text=" <b>{track}</b>",
+                    paused_text="󰏤 <i>{track}</i>",
+                    playing_text=" {track}",
                     scroll=False,
+                    max_chars=40,
                 ),
                 widget.Spacer(),
 
                 # Current Layout Name
-                widget.TextBox("󱂬 ", fontsize=18, foreground="#f2cdcd"),
+                widget.TextBox("󱂬 ", fontsize=18, foreground=BASE06),
                 widget.CurrentLayout(font=font_family,
                                      fontsize=font_size,
                                      fmt=fmt,
-                                     foreground="#f2cdcd"),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
+                                     foreground=BASE06),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
 
                 # Network
                 widget.Net(
@@ -116,21 +150,21 @@ screens = [
                     font=font_family,
                     fontsize=font_size,
                     fmt=fmt,
-                    foreground="#74c7ec",
+                    foreground=BASE0D,
                 ),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
 
                 # Volume
                 widget.TextBox(
                     " ",
                     fontsize=14,
-                    foreground="#a6e3a1",
+                    foreground=BASE0B,
                 ),
                 widget.Volume(font=font_family,
                               fontsize=font_size,
                               fmt=fmt,
-                              foreground="#a6e3a1"),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
+                              foreground=BASE0B),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
 
                 # Time & Date
                 widget.Clock(
@@ -138,15 +172,15 @@ screens = [
                     fontsize=font_size,
                     fmt=fmt,
                     format="󰥔 %H:%M  󰃭 %A %d",
-                    foreground="#fab387",
+                    foreground=BASE09,
                 ),
-                widget.Sep(padding=10, linewidth=2, foreground="#45475a"),
-                widget.TextBox(" ", fontsize=16, foreground="#f38ba8"),
+                widget.Sep(padding=10, linewidth=2, foreground=BASE03),
+                widget.TextBox(" ", fontsize=16, foreground=BASE08),
             ],
             24,
             border_width=6,
-            border_color="#1e1e2e",
-            background="#1e1e2e",
+            border_color=BASE00,
+            background=BASE00,
         ), ),
 ]
 
