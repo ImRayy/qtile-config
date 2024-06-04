@@ -38,7 +38,7 @@ for i in groups:
 # Colorschemes
 try:
     colors = load_file(
-        os.path.expanduser("~/.config/qtile/stylix-colors.json"))
+        os.path.expanduser("~/.config/stylix-colors.json"))
 except FileNotFoundError:
     colors = load_file(
         os.path.expanduser("~/.config/qtile/default-colors.json"))
