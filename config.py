@@ -77,7 +77,7 @@ widget_defaults = dict(
 
 extension_defaults = widget_defaults.copy()
 
-font_family = "CommitMono"
+font_family = "CommitMono Nerd Font"
 font_size = 14
 fmt = "<b>{}</b>"
 
