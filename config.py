@@ -37,8 +37,7 @@ for i in groups:
 
 # Colorschemes
 try:
-    colors = load_file(
-        os.path.expanduser("~/.config/stylix-colors.json"))
+    colors = load_file(os.path.expanduser("~/.config/stylix-colors.json"))
 except FileNotFoundError:
     colors = load_file(
         os.path.expanduser("~/.config/qtile/default-colors.json"))
@@ -59,15 +58,23 @@ BASE0C = colors['base0C']
 BASE0D = colors['base0D']
 BASE0E = colors['base0E']
 BASE0F = colors['base0F']
+BORDER_WIDTH = 3
 
 layouts = [
-    layout.MonadTall(border_width=3, margin=4, border_focus=BASE07),
-    layout.Bsp(),
-    layout.Tile(border_width=3, border_focus=BASE07),
-    layout.TreeTab(),
+    layout.Columns(
+        border_width=BORDER_WIDTH,
+        margin=2,
+        border_focus=BASE0B,
+        border_normal=BASE04,
+        num_columns=2,
+    ),
+    layout.Tile(border_width=BORDER_WIDTH,
+                border_focus=BASE0B,
+                border_normal=BASE04),
+    layout.Max(border_width=BORDER_WIDTH,
+               border_focus=BASE0B,
+               border_normal=BASE04),
 ]
-
-borderwidth = 3
 
 widget_defaults = dict(
     font="sans",
@@ -205,17 +212,22 @@ follow_mouse_focus = True
 bring_front_click = False
 floats_kept_above = True
 cursor_warp = False
-floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
-    *layout.Floating.default_float_rules,
-    Match(wm_class="confirmreset"),  # gitk
-    Match(wm_class="makebranch"),  # gitk
-    Match(wm_class="maketag"),  # gitk
-    Match(wm_class="ssh-askpass"),  # ssh-askpass
-    Match(title="branchdialog"),  # gitk
-    Match(title="pinentry"),  # GPG key password entry
-])
-auto_fullscreen = True
+floating_layout = layout.Floating(
+    border_width=BORDER_WIDTH,
+    border_focus=BASE0B,
+    border_normal=BASE04,
+    float_rules=[
+        # Run the utility of `xprop` to see the wm class and name of an X client.
+        *layout.Floating.default_float_rules,
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class="KeePassXC")
+    ])
+auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
